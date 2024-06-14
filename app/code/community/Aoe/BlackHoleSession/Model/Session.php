@@ -8,11 +8,16 @@ class Aoe_BlackHoleSession_Model_Session extends Mage_Core_Model_Session
     public function __construct(array $data)
     {
         parent::__construct($data);
-        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
-            $config = Mage::getConfig()->getNode('global/aoeblackholesession');
-            $botRegex = (string) $config->descend('bot_regex');
-            if (preg_match($botRegex, $_SERVER['HTTP_USER_AGENT'])) {
-                $this->isBot = true;
+        
+        // Don't FATAL when config node does not exist
+        if(!empty($_SERVER['HTTP_USER_AGENT'])) {
+            if($config = Mage::getConfig()->getNode('global/aoeblackholesession')) {
+              $botRegex = (string) $config->descend('bot_regex');
+              if (preg_match($botRegex, (string) $_SERVER['HTTP_USER_AGENT'])) {
+                  $this->isBot = true;
+              }
+            } else {
+              Mage::log("Aoe_BlackHoleSession is not configured properly", Zend_Log::DEBUG, "aoeblackholesession.log", true);
             }
         }
     }
