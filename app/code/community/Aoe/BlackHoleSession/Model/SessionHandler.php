@@ -39,12 +39,12 @@ class Aoe_BlackHoleSession_Model_SessionHandler implements SessionHandlerInterfa
     public function setHandler()
     {
         session_set_save_handler(
-            array($this, "open"),
-            array($this, "close"),
-            array($this, "read"),
-            array($this, "write"),
-            array($this, "destroy"),
-            array($this, "gc")
+            $this->open(...),
+            $this->close(...),
+            $this->read(...),
+            $this->write(...),
+            $this->destroy(...),
+            $this->gc(...)
         );
     }
 
